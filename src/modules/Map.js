@@ -10,7 +10,11 @@ export default class Map {
     this.exit = exit;
     this.player = player;
 
+    this.board = document.createElement('div');
     this.app = document.querySelector('#app');
+    this.app.insertAdjacentElement('afterbegin', this.board);
+
+    window.addEventListener('keydown', this.handle.bind(this));
   }
   renderMap() {
     for (let i = 0; i < this.lenY; i++) {
@@ -34,10 +38,40 @@ export default class Map {
     for (let i = 0; i < this.field.length; i++) {
       const row = document.createElement('div');
       row.className = 'row';
-      this.app.insertAdjacentElement('beforeend', row);
+      this.board.insertAdjacentElement('beforeend', row);
       for (let j = 0; j < this.field[i].length; j++) {
         row.insertAdjacentElement('beforeend', this.field[i][j].cellEl);
       }
     }
+  }
+  movePlayer() {
+    for (let i = 0; i < this.board.childNodes.length; i++) {
+      for (let j = 0; j < this.board.childNodes[i].childNodes.length; j++) {
+        if (i === this.player.y && j === this.player.x) {
+          this.board.childNodes[i].childNodes[j].classList.add('player');
+        }
+          
+      }
+    }
+  }
+  handle(e) {
+    this.field = [];
+    this.board.childNodes[this.player.y].childNodes[this.player.x].classList.remove('player');
+    switch(e.code) {
+      case 'ArrowUp': 
+        this.player.y--;
+        break;
+      case 'ArrowRight': 
+        this.player.x++;
+        break;
+      case 'ArrowDown': 
+        this.player.y++;
+        break;
+      case 'ArrowLeft':
+        this.player.x--;
+        break;
+    }
+    this.renderMap();
+    this.movePlayer();
   }
 }
