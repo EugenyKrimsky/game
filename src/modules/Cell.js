@@ -3,5 +3,8 @@ export default class Cell {
     this.type = type;
     this.x = x;
     this.y = y;
+
+    this.cellEl = document.createElement('div');
+    this.cellEl.className = `cell ${type}`
   }
 }

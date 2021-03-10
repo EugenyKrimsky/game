@@ -22,5 +22,14 @@ module.exports = {
       filename: 'index.html'
     }),
     new CleanWebpackPlugin(),
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(scss|css)$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      
+    ]
+},
 }
