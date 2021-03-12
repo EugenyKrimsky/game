@@ -19,6 +19,13 @@ export default class Map {
     this.app.insertAdjacentElement('afterbegin', this.board);
 
     window.addEventListener('keydown', this.handle.bind(this));
+
+    const cordsPlayerEl = document.createElement('h2');
+    cordsPlayerEl.className = 'cords_player';
+    cordsPlayerEl.innerText = `x:${player.x} y:${player.y}`;
+
+    this.playerCordsEl = cordsPlayerEl;
+    this.app.insertAdjacentElement('afterbegin', this.playerCordsEl);
   }
   renderMap() {
     for (let i = 0; i < this.lenY; i++) {
@@ -54,6 +61,7 @@ export default class Map {
     console.log(this.field[this.playerCords.y][this.playerCords.x]);
     if (!(this.exitCords.y === this.playerCords.y && this.exitCords.x === this.playerCords.x)) {
       this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].className = `cell player`;
+      this.playerCordsEl.innerText = `x:${this.playerCords.x} y:${this.playerCords.y}`;
     }
   }
   richedGoal(goal) {
@@ -80,6 +88,7 @@ export default class Map {
       this.playerCords.y = action === 'plus' ? this.playerCords.y + 1 : this.playerCords.y - 1;
     }
     this.renderMap();
+    this.playerCordsEl.innerText = `x:${this.playerCords.y} y:${this.playerCords.y}`
     if (this.richedGoal(this.keyCords)) this.gotKey();
     if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
   }
