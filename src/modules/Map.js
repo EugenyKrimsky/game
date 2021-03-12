@@ -53,13 +53,25 @@ export default class Map {
   }
   movePlayer() {
     console.log(this.field[this.playerCords.y][this.playerCords.x]);
-    this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].className = `cell player`;
+    if (!(this.exitCords.y === this.playerCords.y && this.exitCords.x === this.playerCords.x)) {
+      this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].className = `cell player`;
+    }
   }
   richedGoal(goal) {
     return goal.y === this.playerCords.y && goal.x === this.playerCords.x
   }
   gotKey() {
     this.playerGotKey = true;
+  }
+  gotExit() {
+    alert('win');
+    this.field = [];
+    this.playerGotKey = false;
+    this.playerCords = { x: 1, y: 1 };
+    this.keyCords = { x: 5, y: 1 };
+    this.exitCords = { x: 5, y: 2 };
+    this.renderMap();
+    this.board.childNodes[this.keyCords.y].childNodes[this.keyCords.x].className = `cell key`;
   }
   handle(e) {
     this.field = [];
@@ -69,36 +81,32 @@ export default class Map {
         this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
         this.playerCords.y--;
         this.renderMap();
-        if (this.richedGoal(this.keyCords)) {
-          this.gotKey();
-        };
+        if (this.richedGoal(this.keyCords)) this.gotKey();
+        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
         break;
       case 'ArrowRight':
         if (this.playerCords.x + 1 === this.lenX - 1) break;
         this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
         this.playerCords.x++;
         this.renderMap();
-        if (this.richedGoal(this.keyCords)) {
-          this.gotKey();
-        };
+        if (this.richedGoal(this.keyCords)) this.gotKey();
+        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
         break;
       case 'ArrowDown':
         if (this.playerCords.y + 1 === this.lenY - 1) break;
         this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
         this.playerCords.y++;
         this.renderMap();
-        if (this.richedGoal(this.keyCords)) {
-          this.gotKey();
-        };
+        if (this.richedGoal(this.keyCords)) this.gotKey();
+        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
         break;
       case 'ArrowLeft':
         if (this.playerCords.x - 1 === 0) break;
         this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
         this.playerCords.x--;
         this.renderMap();
-        if (this.richedGoal(this.keyCords)) {
-          this.gotKey();
-        };
+        if (this.richedGoal(this.keyCords)) this.gotKey();;
+        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
         break;
     }
     this.movePlayer();
