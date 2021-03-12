@@ -1,4 +1,3 @@
-import Cell from "./cells/Cell";
 import Empty from "./cells/Empty";
 import Exit from "./cells/Exit";
 import Key from "./cells/Key";
@@ -73,40 +72,35 @@ export default class Map {
     this.renderMap();
     this.board.childNodes[this.keyCords.y].childNodes[this.keyCords.x].className = `cell key`;
   }
+  move(axis, action) {
+    this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
+    if (axis === 'x') {
+      this.playerCords.x = action === 'plus' ? this.playerCords.x + 1 : this.playerCords.x - 1;
+    } else {
+      this.playerCords.y = action === 'plus' ? this.playerCords.y + 1 : this.playerCords.y - 1;
+    }
+    this.renderMap();
+    if (this.richedGoal(this.keyCords)) this.gotKey();
+    if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
+  }
   handle(e) {
     this.field = [];
     switch (e.code) {
       case 'ArrowUp':
         if (this.playerCords.y - 1 === 0) break;
-        this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
-        this.playerCords.y--;
-        this.renderMap();
-        if (this.richedGoal(this.keyCords)) this.gotKey();
-        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
+        this.move('y', 'minus');
         break;
       case 'ArrowRight':
         if (this.playerCords.x + 1 === this.lenX - 1) break;
-        this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
-        this.playerCords.x++;
-        this.renderMap();
-        if (this.richedGoal(this.keyCords)) this.gotKey();
-        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
+        this.move('x', 'plus');
         break;
       case 'ArrowDown':
         if (this.playerCords.y + 1 === this.lenY - 1) break;
-        this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
-        this.playerCords.y++;
-        this.renderMap();
-        if (this.richedGoal(this.keyCords)) this.gotKey();
-        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
+        this.move('y', 'plus');
         break;
       case 'ArrowLeft':
         if (this.playerCords.x - 1 === 0) break;
-        this.board.childNodes[this.playerCords.y].childNodes[this.playerCords.x].classList.remove('player');
-        this.playerCords.x--;
-        this.renderMap();
-        if (this.richedGoal(this.keyCords)) this.gotKey();;
-        if (this.playerGotKey) if (this.richedGoal(this.exitCords)) this.gotExit();
+        this.move('x', 'minus');
         break;
     }
     this.movePlayer();
